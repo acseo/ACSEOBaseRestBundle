@@ -1,6 +1,6 @@
 <?php
 
-namespace ACSEO\Bundle\BaseRestBundle\Controller;
+namespace ACSEO\BaseRestBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
