@@ -1,5 +1,5 @@
 {
-    "name": "acseo/base-rest-bundle",
+    "name": "ACSEO/BaseRestBundle",
     "type": "symfony-bundle",
     "description": "A bundle to manage your REST application",
     "keywords": ["Symfony", "REST", "API"],
@@ -20,6 +20,5 @@
     "autoload": {
         "psr-0": { "ACSEO\\BaseRestBundle": "" }
     },
-    "target-dir": "ACSEO/BaseRestBundle",
     "minimum-stability": "dev"
 }
