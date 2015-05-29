@@ -1,0 +1,3 @@
+so_buzz_base_rest_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: AcseoBaseRestBundle:Default:index }
