@@ -20,6 +20,6 @@
     "autoload": {
         "psr-0": { "ACSEO\\BaseRestBundle": "" }
     },
-    "target-dir": "ACSEO/Bundle/BaseRestBundle",
+    "target-dir": "ACSEO/BaseRestBundle",
     "minimum-stability": "dev"
 }
