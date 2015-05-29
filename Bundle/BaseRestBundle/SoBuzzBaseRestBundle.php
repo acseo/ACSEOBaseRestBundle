@@ -1,9 +1,9 @@
 <?php
 
-namespace Acseo\Bundle\BaseRestBundle;
+namespace ACSEO\Bundle\BaseRestBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AcseoBaseRestBundle extends Bundle
+class ACSEOBaseRestBundle extends Bundle
 {
 }

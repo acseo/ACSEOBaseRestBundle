@@ -1,5 +1,5 @@
 <?php
-namespace Acseo\Bundle\BaseRestBundle\Processor;
+namespace ACSEO\Bundle\BaseRestBundle\Processor;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Bridge\Monolog\Processor\WebProcessor;

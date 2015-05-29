@@ -1,6 +1,6 @@
 <?php
 
-namespace Acseo\Bundle\BaseRestBundle\Entity;
+namespace ACSEO\Bundle\BaseRestBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 

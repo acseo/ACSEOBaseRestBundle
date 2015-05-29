@@ -1,11 +1,11 @@
 <?php
-namespace Acseo\Bundle\BaseRestBundle\Entity;
+namespace ACSEO\Bundle\BaseRestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
- * @ORM\Entity(repositoryClass="Acseo\Bundle\BaseRestBundle\Entity\RestLogRepository")
+ * @ORM\Entity(repositoryClass="ACSEO\Bundle\BaseRestBundle\Entity\RestLogRepository")
  * @ORM\Table(name="rest_log")
  */
 class RestLog

@@ -1,9 +1,9 @@
 parameters:
-    logger_database.class: Acseo\Bundle\BaseRestBundle\Logger\DatabaseHandler
+    logger_database.class: ACSEO\Bundle\BaseRestBundle\Logger\DatabaseHandler
 
 # services:
-#   Acseo.listener.logrequest:
-#     class: Acseo\Bundle\BaseRestBundle\Listener\LogRequestListener
+#   ACSEO.listener.logrequest:
+#     class: ACSEO\Bundle\BaseRestBundle\Listener\LogRequestListener
 #     arguments: [ @service_container ]
 #     tags:
 #       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
@@ -11,7 +11,7 @@ parameters:
 
 services:
     # monolog.processor.request:
-    #     class: Acseo\Bundle\BaseRestBundle\Processor\RequestProcessor
+    #     class: ACSEO\Bundle\BaseRestBundle\Processor\RequestProcessor
     #     arguments:  [ @service_container ]
     #     tags:
     #         - { name: monolog.processor, method: processRecord }
@@ -23,7 +23,7 @@ services:
     #         - [ setContainer, [ @service_container ] ]
 
     # tools.backtrace_logger_listener:
-    #     class: Acseo\Bundle\BaseRestBundle\Listener\BacktraceLoggerListener
+    #     class: ACSEO\Bundle\BaseRestBundle\Listener\BacktraceLoggerListener
     #     tags:
     #         - {name: "monolog.logger", channel: "backtrace"}
     #         - {name: "kernel.event_listener", event: "kernel.exception", method: "onKernelException"}

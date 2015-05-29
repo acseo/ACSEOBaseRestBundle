@@ -1,5 +1,5 @@
 <?php
-namespace Acseo\Bundle\BaseRestBundle\Listener;
+namespace ACSEO\Bundle\BaseRestBundle\Listener;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;

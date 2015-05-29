@@ -1,6 +1,6 @@
 <?php
 
-namespace Acseo\Bundle\BaseRestBundle\DependencyInjection;
+namespace ACSEO\Bundle\BaseRestBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

@@ -1,5 +1,5 @@
 <?php
-namespace Acseo\Bundle\BaseRestBundle\Logger;
+namespace ACSEO\Bundle\BaseRestBundle\Logger;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
