@@ -1,6 +1,6 @@
 <?php
 
-namespace ACSEO\Bundle\BaseRestBundle;
+namespace ACSEO\BaseRestBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
