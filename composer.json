@@ -18,8 +18,8 @@
 
     },
     "autoload": {
-        "psr-0": { "ACSEO\\BaseRestBundle": "" }
+        "psr-0": { "ACSEO\\Bundle\\BaseRestBundle": "" }
     },
-    "target-dir": "ACSEO/BaseRestBundle",
+    "target-dir": "ACSEO/Bundle/BaseRestBundle",
     "minimum-stability": "dev"
 }
