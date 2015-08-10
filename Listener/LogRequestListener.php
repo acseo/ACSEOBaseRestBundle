@@ -1,4 +1,5 @@
 <?php
+
 namespace ACSEO\Bundle\BaseRestBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -15,16 +16,16 @@ class LogRequestListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $kernel    = $event->getKernel();
-        $request   = $event->getRequest();
+        $kernel = $event->getKernel();
+        $request = $event->getRequest();
         $container = $this->container;
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $response  = $event->getResponse();
-        $request   = $event->getRequest();
-        $kernel    = $event->getKernel();
+        $response = $event->getResponse();
+        $request = $event->getRequest();
+        $kernel = $event->getKernel();
         $container = $this->container;
 
         switch ($request->query->get('option')) {

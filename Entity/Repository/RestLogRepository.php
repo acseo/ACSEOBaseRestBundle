@@ -1,13 +1,13 @@
 <?php
 
-namespace ACSEO\Bundle\BaseRestBundle\Entity;
+namespace ACSEO\Bundle\BaseRestBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
 class RestLogRepository extends EntityRepository
 {
     /**
-     * Find the latest logs
+     * Find the latest logs.
      */
     public function findLatest()
     {

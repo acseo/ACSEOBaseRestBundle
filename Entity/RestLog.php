@@ -1,11 +1,11 @@
 <?php
+
 namespace ACSEO\Bundle\BaseRestBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
- * @ORM\Entity(repositoryClass="ACSEO\Bundle\BaseRestBundle\Entity\RestLogRepository")
+ * @ORM\Entity(repositoryClass="ACSEO\Bundle\BaseRestBundle\Entity\Repository\RestLogRepository")
  * @ORM\Table(name="rest_log")
  */
 class RestLog
@@ -71,9 +71,9 @@ class RestLog
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -81,9 +81,10 @@ class RestLog
     }
 
     /**
-     * Set referer
+     * Set referer.
      *
-     * @param  string  $referer
+     * @param string $referer
+     *
      * @return RestLog
      */
     public function setReferer($referer)
@@ -94,7 +95,7 @@ class RestLog
     }
 
     /**
-     * Get referer
+     * Get referer.
      *
      * @return string
      */
@@ -104,9 +105,10 @@ class RestLog
     }
 
     /**
-     * Set routeName
+     * Set routeName.
      *
-     * @param  string  $routeName
+     * @param string $routeName
+     *
      * @return RestLog
      */
     public function setRouteName($routeName)
@@ -117,7 +119,7 @@ class RestLog
     }
 
     /**
-     * Get routeName
+     * Get routeName.
      *
      * @return string
      */
@@ -127,9 +129,10 @@ class RestLog
     }
 
     /**
-     * Set uri
+     * Set uri.
      *
-     * @param  string  $uri
+     * @param string $uri
+     *
      * @return RestLog
      */
     public function setUri($uri)
@@ -140,7 +143,7 @@ class RestLog
     }
 
     /**
-     * Get uri
+     * Get uri.
      *
      * @return string
      */
@@ -150,9 +153,10 @@ class RestLog
     }
 
     /**
-     * Set method
+     * Set method.
      *
      * @param $method
+     *
      * @return RestLog
      */
     public function setMethod($method)
@@ -163,7 +167,7 @@ class RestLog
     }
 
     /**
-     * Get method
+     * Get method.
      *
      * @return string
      */
@@ -173,9 +177,10 @@ class RestLog
     }
 
     /**
-     * Set data
+     * Set data.
      *
-     * @param  string  $data
+     * @param string $data
+     *
      * @return RestLog
      */
     public function setData($data)
@@ -186,7 +191,7 @@ class RestLog
     }
 
     /**
-     * Get data
+     * Get data.
      *
      * @return string
      */
@@ -196,9 +201,10 @@ class RestLog
     }
 
     /**
-     * Set modified
+     * Set modified.
      *
-     * @param  \DateTime $modified
+     * @param \DateTime $modified
+     *
      * @return RestLog
      */
     public function setModified($modified)
@@ -209,7 +215,7 @@ class RestLog
     }
 
     /**
-     * Get modified
+     * Get modified.
      *
      * @return \DateTime
      */
@@ -219,9 +225,10 @@ class RestLog
     }
 
     /**
-     * Set created
+     * Set created.
      *
-     * @param  \DateTime $created
+     * @param \DateTime $created
+     *
      * @return RestLog
      */
     public function setCreated($created)
@@ -232,7 +239,7 @@ class RestLog
     }
 
     /**
-     * Get created
+     * Get created.
      *
      * @return \DateTime
      */

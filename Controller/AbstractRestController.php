@@ -1,9 +1,11 @@
 <?php
 
-namespace ACSEO\BaseRestBundle\Controller;
+namespace ACSEO\Bundle\BaseRestBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -13,6 +15,14 @@ use Hateoas\Configuration\Route;
 
 abstract class AbstractRestController extends FOSRestController implements ClassResourceInterface
 {
+    public function optionsAction()
+    {
+        $response = new Response();
+        $response->headers->set('Allow', 'OPTIONS, GET, PATCH, POST, DELETE, PUT');
+
+        return $response;
+    }
+
     public function getAction($id)
     {
         if (!$this->isShowAvailable()) {
@@ -26,15 +36,43 @@ abstract class AbstractRestController extends FOSRestController implements Class
         );
     }
 
+    public function deleteAction($id)
+    {
+        if (!$this->isDeleteAvailable()) {
+            throw new NotFoundHttpException();
+        }
+
+        $entity = $this->getEntity($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
+
+        $view = $this->view(
+            $entity,
+            Codes::HTTP_OK
+        );
+
+        return $this->handleView($view);
+    }
+
     public function cgetAction(\FOS\RestBundle\Request\ParamFetcher $paramFetcher)
     {
         if (!$this->isIndexAvailable()) {
             throw new NotFoundHttpException();
         }
 
+        /*
         $queryBuilder = $this->getDoctrine()->getManager()->getRepository($this->getEntityName())->findByQuery(
             $this->getQueryParams($paramFetcher),
             $this->getQuerySortForDoctrine($this->getRequest())
+        );
+        */
+
+        return $this->getDoctrine()->getManager()->getRepository($this->getEntityName())->findBy(
+            $this->getQueryParams($paramFetcher),
+            $this->getQuerySortForDoctrine($this->getRequest()),
+            $this->getQueryLimit($this->getRequest()),
+            $this->getQueryOffset($this->getRequest())
         );
 
         $adapter = new DoctrineORMAdapter($queryBuilder);
@@ -42,18 +80,18 @@ abstract class AbstractRestController extends FOSRestController implements Class
         $pager->setCurrentPage($this->getQueryCurrentPage($this->getRequest()));
         $pager->setMaxPerPage($this->getQueryMaxPerPage($this->getRequest()));
 
-        $pagerfantaFactory   = new PagerfantaFactory("_page", "_per_page");
+        $pagerfantaFactory = new PagerfantaFactory('_page', '_per_page');
         $paginatedCollection = $pagerfantaFactory->createRepresentation(
             $pager,
             new Route(
-                $this->getRoute("index"),
+                $this->getRoute('index'),
                 array_merge(
                     $this->getQueryParams($paramFetcher),
                     $this->getQuerySort($this->getRequest())
                 )
             )
         );
-        
+
         return  $paginatedCollection;
     }
 
@@ -73,10 +111,10 @@ abstract class AbstractRestController extends FOSRestController implements Class
             $em->flush();
             $view = $this->view(
                 /*$this->generateUrl(
-                $this->getRoute("show"),
-                array(
-                'id' => $entity->getId()
-                )
+                    $this->getRoute("show"),
+                    array(
+                        'id' => $entity->getId()
+                    )
                 ),*/
                 $entity,
                 Codes::HTTP_CREATED
@@ -97,7 +135,7 @@ abstract class AbstractRestController extends FOSRestController implements Class
         }
 
         $entity = $entity = $this->getEntity($id);
-        $form = $this->createForm($this->createEntityType(), $entity, array("method" => "PUT"));
+        $form = $this->createForm($this->createEntityType(), $entity, array('method' => 'PUT'));
         $form->submit($request);
 
         if ($form->isValid()) {
@@ -120,33 +158,35 @@ abstract class AbstractRestController extends FOSRestController implements Class
     }
     /**
      * Fetch parameters transmited by @Rest\QueryParam and not begining by "_"
-     * Can be used to created a SQL query and search data
+     * Can be used to created a SQL query and search data.
      */
     protected function getQueryParams($paramFetcher)
     {
         $params = array();
         foreach ($paramFetcher->all() as $criterionName => $criterionValue) {
-            if (null != $criterionValue && substr($criterionName, 0, 1) != "_") {
+            if (null != $criterionValue && substr($criterionName, 0, 1) != '_') {
                 $params[$criterionName] = $criterionValue;
             }
         }
+
         return $params;
     }
 
     /**
      * Search the specific parameter "_per_page" in the request.
+     *
      * @return the number of item per page to display
      */
     protected function getQueryLimit($request)
     {
         $data = $request->query->all();
         if (isset($data['_per_page']) &&
-            $data['_per_page'] <= $this->container->getParameter('so_buzz_application_rest.listing_max_per_page')
+            $data['_per_page'] <= $this->container->getParameter('acseo_base_rest.listing_max_per_page')
             ) {
             return $data['_per_page'];
         }
 
-        return $this->container->getParameter('so_buzz_application_rest.listing_max_per_page');
+        return $this->container->getParameter('acseo_base_rest.listing_max_per_page');
     }
 
     protected function getQueryMaxPerPage($request)
@@ -156,6 +196,7 @@ abstract class AbstractRestController extends FOSRestController implements Class
 
     /**
      * Search the specific parameter "_page" in the request.
+     *
      * @return the current page number
      */
     protected function getQueryCurrentPage($request)
@@ -172,7 +213,7 @@ abstract class AbstractRestController extends FOSRestController implements Class
     {
         $data = $request->query->all();
         if (isset($data['_page'])) {
-            return $this->getQueryPage($request) * $this->getQueryLimit($request);
+            return $this->getQueryCurrentPage($request) * $this->getQueryLimit($request);
         }
 
         return 0;
@@ -184,12 +225,12 @@ abstract class AbstractRestController extends FOSRestController implements Class
         $data = $request->query->all();
         if (isset($data['_sort'])) {
             $key = $data['_sort'];
-            $value = "ASC";
-            if (isset($data['_sort_order']) && (strtoupper($data['_sort_order']) == "ASC" || strtoupper($data['_sort_order']) == "DESC")) {
+            $value = 'ASC';
+            if (isset($data['_sort_order']) && (strtoupper($data['_sort_order']) == 'ASC' || strtoupper($data['_sort_order']) == 'DESC')) {
                 $value = strtoupper($data['_sort_order']);
             }
 
-            $sort = array("_sort" => $key, "_sort_order" => $value);
+            $sort = array('_sort' => $key, '_sort_order' => $value);
         }
 
         return $sort;
@@ -199,15 +240,17 @@ abstract class AbstractRestController extends FOSRestController implements Class
     {
         $data = $this->getQuerySort($request);
         if (sizeof($data) != 0) {
-            return array($data["_sort"] => $data["_sort_order"]);
+            return array($data['_sort'] => $data['_sort_order']);
         }
 
         return;
     }
 
     /**
-     * Get entity instance
-     * @var integer $id Id of the entity
+     * Get entity instance.
+     *
+     * @var int Id of the entity
+     *
      * @return Contact
      */
     protected function getEntity($id)
@@ -245,24 +288,24 @@ abstract class AbstractRestController extends FOSRestController implements Class
 
     protected function isDeleteAvailable()
     {
-        return false;
+        return true;
     }
 
     private function getRoute($actionCode)
     {
         switch ($actionCode) {
-            case "index":
-                $entityTab = explode(":", $this->getEntityName());
+            case 'index':
+                $entityTab = explode(':', $this->getEntityName());
 
-                return sprintf("get_%ss", strtolower($entityTab[1]));
+                return sprintf('get_%ss', strtolower($entityTab[1]));
                 break;
-            case "show":
-                $entityTab = explode(":", $this->getEntityName());
+            case 'show':
+                $entityTab = explode(':', $this->getEntityName());
 
-                return sprintf("get_%s", strtolower($entityTab[1]));
+                return sprintf('get_%s', strtolower($entityTab[1]));
                 break;
             default:
-                throw new \Exception(sprintf("%s is not a recognized action code", $actionCode));
+                throw new \Exception(sprintf('%s is not a recognized action code', $actionCode));
                 break;
         }
     }

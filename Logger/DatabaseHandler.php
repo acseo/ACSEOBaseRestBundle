@@ -1,12 +1,12 @@
 <?php
+
 namespace ACSEO\Bundle\BaseRestBundle\Logger;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
 /**
- * Stores to database
- *
+ * Stores to database.
  */
 class DatabaseHandler extends AbstractProcessingHandler
 {
@@ -14,7 +14,7 @@ class DatabaseHandler extends AbstractProcessingHandler
 
     /**
      * @param string  $stream
-     * @param integer $level  The minimum logging level at which this handler will be triggered
+     * @param int     $level  The minimum logging level at which this handler will be triggered
      * @param Boolean $bubble Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($level = Logger::DEBUG, $bubble = true)
@@ -23,7 +23,6 @@ class DatabaseHandler extends AbstractProcessingHandler
     }
 
     /**
-     *
      * @param type $container
      */
     public function setContainer($container)

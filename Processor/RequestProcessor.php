@@ -1,4 +1,5 @@
 <?php
+
 namespace ACSEO\Bundle\BaseRestBundle\Processor;
 
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -12,12 +13,12 @@ class RequestProcessor extends WebProcessor implements \Monolog\Formatter\Format
     public function __construct($container)
     {
         $this->container = $container;
-        $this->_session = $container->get("session");
+        $this->_session = $container->get('session');
     }
 
     public function processRecord(array $record)
     {
-        $record['extra']['serverData'] = "";
+        $record['extra']['serverData'] = '';
 
         if (is_array($this->serverData)) {
             foreach ($this->serverData as $key => $value) {
@@ -25,7 +26,7 @@ class RequestProcessor extends WebProcessor implements \Monolog\Formatter\Format
                     $value = print_r($value, true);
                 }
 
-                $record['extra']['serverData'] .= $key.": ".$value."\n";
+                $record['extra']['serverData'] .= $key.': '.$value."\n";
             }
         }
 
@@ -34,7 +35,7 @@ class RequestProcessor extends WebProcessor implements \Monolog\Formatter\Format
                 $value = print_r($value, true);
             }
 
-            $record['extra']['serverData'] .= $key.": ".$value."\n";
+            $record['extra']['serverData'] .= $key.': '.$value."\n";
         }
 
         return $record;
@@ -43,7 +44,8 @@ class RequestProcessor extends WebProcessor implements \Monolog\Formatter\Format
     /**
      * Formats a log record.
      *
-     * @param  array $record A record to format
+     * @param array $record A record to format
+     *
      * @return mixed The formatted record
      */
     public function format(array $record)
@@ -54,11 +56,12 @@ class RequestProcessor extends WebProcessor implements \Monolog\Formatter\Format
     /**
      * Formats a set of log records.
      *
-     * @param  array $records A set of records to format
+     * @param array $records A set of records to format
+     *
      * @return mixed The formatted set of records
      */
     public function formatBatch(array $records)
     {
-        echo "formatBatch";
+        echo 'formatBatch';
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace ACSEO\Bundle\BaseRestBundle\Listener;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
