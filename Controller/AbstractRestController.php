@@ -3,6 +3,7 @@
 namespace ACSEO\Bundle\BaseRestBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -110,12 +111,12 @@ abstract class AbstractRestController extends FOSRestController implements Class
             $em->persist($entity);
             $em->flush();
             $view = $this->view(
-                /*$this->generateUrl(
-                    $this->getRoute("show"),
-                    array(
-                        'id' => $entity->getId()
-                    )
-                ),*/
+                // $this->generateUrl(
+                //     $this->getRoute("show"),
+                //     array(
+                //         'id' => $entity->getId()
+                //     )
+                // ),
                 $entity,
                 Codes::HTTP_CREATED
             );
@@ -156,6 +157,27 @@ abstract class AbstractRestController extends FOSRestController implements Class
             'form' => $form,
         );
     }
+
+    /**
+     * Add parameter manually to @Rest\QueryParam
+     */
+    protected function addQueryParam(\FOS\RestBundle\Request\ParamFetcher $paramFetcher, $paramArray)
+    {
+        $param = new Rest\QueryParam();
+
+        foreach ($paramArray as $key => $value) {
+            if (!property_exists($param, $key)) {
+                throw new UnprocessableEntityHttpException();
+            }
+
+            $param->$key = $value;
+        }
+
+        $paramFetcher->addParam($param);
+
+        return $paramFetcher;
+    }
+
     /**
      * Fetch parameters transmited by @Rest\QueryParam and not begining by "_"
      * Can be used to created a SQL query and search data.
