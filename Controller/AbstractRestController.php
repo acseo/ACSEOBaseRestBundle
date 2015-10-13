@@ -9,6 +9,8 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
+use FOS\RestBundle\View\View;
+use JMS\Serializer\SerializationContext;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Hateoas\Representation\Factory\PagerfantaFactory;
@@ -62,38 +64,17 @@ abstract class AbstractRestController extends FOSRestController implements Class
             throw new NotFoundHttpException();
         }
 
-        /*
-        $queryBuilder = $this->getDoctrine()->getManager()->getRepository($this->getEntityName())->findByQuery(
-            $this->getQueryParams($paramFetcher),
-            $this->getQuerySortForDoctrine($this->getRequest())
-        );
-        */
-
-        return $this->getDoctrine()->getManager()->getRepository($this->getEntityName())->findBy(
+        $data = $this->getDoctrine()->getManager()->getRepository($this->getEntityName())->findBy(
             $this->getQueryParams($paramFetcher),
             $this->getQuerySortForDoctrine($this->getRequest()),
             $this->getQueryLimit($this->getRequest()),
             $this->getQueryOffset($this->getRequest())
         );
 
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pager = new Pagerfanta($adapter);
-        $pager->setCurrentPage($this->getQueryCurrentPage($this->getRequest()));
-        $pager->setMaxPerPage($this->getQueryMaxPerPage($this->getRequest()));
-
-        $pagerfantaFactory = new PagerfantaFactory('_page', '_per_page');
-        $paginatedCollection = $pagerfantaFactory->createRepresentation(
-            $pager,
-            new Route(
-                $this->getRoute('index'),
-                array_merge(
-                    $this->getQueryParams($paramFetcher),
-                    $this->getQuerySort($this->getRequest())
-                )
-            )
-        );
-
-        return  $paginatedCollection;
+        return $this->handleView($this->view(
+            $data,
+            Codes::HTTP_OK
+        ));
     }
 
     public function postAction(\Symfony\Component\HttpFoundation\Request $request)
@@ -331,6 +312,16 @@ abstract class AbstractRestController extends FOSRestController implements Class
                 break;
         }
     }
+
+    protected function handleView(View $view) {
+        $serializeGroups = $this->get('request')->get('serialize', null);
+
+        if (is_null($serializeGroups) === false && strlen($serializeGroups) > 0) {
+           $view->setSerializationContext(SerializationContext::create()->setGroups(array($serializeGroups)));
+        }
+
+       return parent::handleView($view);
+   }
 
     abstract protected function getEntityName();
     abstract protected function getEntityHumanName();
