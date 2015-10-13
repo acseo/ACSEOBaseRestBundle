@@ -4,6 +4,7 @@
     "description": "A bundle to manage your REST application",
     "keywords": ["Symfony", "REST", "API"],
     "homepage": "https://github.com/acseo/ACSEOBaseRestBundle",
+    "license": "MIT",
     "authors": [
         {
             "name": "Nicolas Potier",
