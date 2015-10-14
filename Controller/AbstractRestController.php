@@ -34,9 +34,10 @@ abstract class AbstractRestController extends FOSRestController implements Class
 
         $entity = $this->getEntity($id);
 
-        return array(
-            'entity' => $entity,
-        );
+        return $this->handleView($this->view(
+           array('entity' => $entity),
+           Codes::HTTP_OK
+       ));
     }
 
     public function deleteAction($id)
