@@ -70,4 +70,24 @@ abstract class AbstractBaseControllerTest extends WebTestCase
 
         return $item['id'];
     }
+
+    protected function createAuthenticatedClient()
+    {
+        $client = static::createClient();
+        $client->request(
+            'POST',
+            '/api/login_check',
+            array(
+                '_username' => $client->getKernel()->getContainer()->getParameter('test_username'),
+                '_password' => $client->getKernel()->getContainer()->getParameter('test_password'),
+            )
+        );
+
+        $data = json_decode($client->getResponse()->getContent(), true);
+
+        $client = static::createClient();
+        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
+
+        return $client;
+    }
 }
