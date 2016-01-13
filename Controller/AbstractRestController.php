@@ -11,10 +11,6 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\SerializationContext;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
-use Hateoas\Representation\Factory\PagerfantaFactory;
-use Hateoas\Configuration\Route;
 
 abstract class AbstractRestController extends FOSRestController implements ClassResourceInterface
 {
@@ -35,9 +31,9 @@ abstract class AbstractRestController extends FOSRestController implements Class
         $entity = $this->getEntity($id);
 
         return $this->handleView($this->view(
-           array('entity' => $entity),
-           Codes::HTTP_OK
-       ));
+            array('entity' => $entity),
+            Codes::HTTP_OK
+        ));
     }
 
     public function deleteAction($id)
@@ -93,12 +89,6 @@ abstract class AbstractRestController extends FOSRestController implements Class
             $em->persist($entity);
             $em->flush();
             $view = $this->view(
-                // $this->generateUrl(
-                //     $this->getRoute("show"),
-                //     array(
-                //         'id' => $entity->getId()
-                //     )
-                // ),
                 $entity,
                 Codes::HTTP_CREATED
             );
@@ -131,8 +121,6 @@ abstract class AbstractRestController extends FOSRestController implements Class
             );
 
             return $this->handleView($view);
-
-            //return new \Symfony\Component\HttpFoundation\Response(null, Codes::HTTP_NO_CONTENT);
         }
 
         return array(
@@ -141,7 +129,7 @@ abstract class AbstractRestController extends FOSRestController implements Class
     }
 
     /**
-     * Add parameter manually to @Rest\QueryParam
+     * Add parameter manually to @Rest\QueryParam.
      */
     protected function addQueryParam(\FOS\RestBundle\Request\ParamFetcher $paramFetcher, $paramArray)
     {
@@ -207,7 +195,7 @@ abstract class AbstractRestController extends FOSRestController implements Class
     {
         $data = $request->query->all();
         if (isset($data['_page'])) {
-            return ($data['_page']);
+            return $data['_page'];
         }
 
         return 1;
@@ -314,21 +302,19 @@ abstract class AbstractRestController extends FOSRestController implements Class
         }
     }
 
-    protected function handleView(View $view) {
+    protected function handleView(View $view)
+    {
         $serializeGroups = $this->get('request')->get('serialize', null);
 
         if (is_null($serializeGroups) === false && strlen($serializeGroups) > 0) {
-           $view->setSerializationContext(SerializationContext::create()->setGroups(array($serializeGroups)));
+            $view->setSerializationContext(SerializationContext::create()->setGroups(array($serializeGroups)));
         }
 
-       return parent::handleView($view);
-   }
+        return parent::handleView($view);
+    }
 
     abstract protected function getEntityName();
     abstract protected function getEntityHumanName();
-    //abstract protected function getEntityInSentenceName();
-    //abstract protected function getEntityPluralHumanName();
-
     abstract protected function createEntityInstance();
     abstract protected function createEntityType();
 }
